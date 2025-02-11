@@ -46,8 +46,8 @@ public class Auth {
 
 
     @Test
-    public static void testauthApi() {
-        authApi(103);
+    public static void testAuthApi() {
+        authApi(104);
     }
 
 
