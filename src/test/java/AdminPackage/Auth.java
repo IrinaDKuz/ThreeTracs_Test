@@ -45,12 +45,6 @@ public class Auth {
     };
 
 
-    @Test
-    public static void testAuthApi() {
-        authApi(104);
-    }
-
-
     public static void authApi(Integer user) {
         System.out.println("Пользователь, которым зашли в систему: " + user);
 
