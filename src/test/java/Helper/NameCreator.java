@@ -1,11 +1,6 @@
 package Helper;
 
 import com.github.javafaker.Faker;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-
-import static AdminPackage.Auth.KEY;
 
 public class NameCreator {
 
