@@ -1,4 +1,4 @@
-package AdminPackage;
+package aaaTestPackage;
 
 import org.testng.annotations.Test;
 
