@@ -1,29 +1,38 @@
 package AdminPackage;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
+import AdminPackage.AdminEntity.AdminFromList;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static AdminPackage.Auth.*;
 
-import static io.restassured.RestAssured.given;
+import static Helper.GetPost.getMethod;
 
 public class GetAdmin {
 
-    public static void getAdmin() {
-
+    public static void getAdmins() {
         String path = DEV_API_NODE + "/admin/";
-        System.out.println(path);
+        String responseString = getMethod(path);
 
-        Response response = RestAssured.given()
-                .contentType(ContentType.URLENC)
-                .header("Authorization", KEY)
-                .header("Accept", "application/json")
-                .header("Content-Type", "application/json")
-                .get(path);
+        System.out.println("Ответ на get: " + responseString);
+        // attachJson(responseBody, GET_RESPONSE);
 
-        String responseString = response.getBody().asString();
-        System.out.println(responseString);
+        JSONObject jsonObject = new JSONObject(responseString);
+        JSONObject data = jsonObject.getJSONObject("data");
+        JSONArray adminArray = data.getJSONArray("admin");
 
+        for (int i = 0; i < adminArray.length(); i++) {
+            AdminFromList adminFromList = new AdminFromList();
+            JSONObject dataObject = adminArray.getJSONObject(i);
+        }
     }
+
+    public static void getAdmin(int id) {
+        String path = DEV_API_NODE + "/admin/" + id;
+        System.out.println(path);
+        String responseString = getMethod(path);;
+        System.out.println(responseString);
+    }
+
+
 }
