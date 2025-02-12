@@ -1,9 +1,8 @@
-package AdminPackage;
+package adminpackage;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.Map;

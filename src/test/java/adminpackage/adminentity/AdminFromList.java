@@ -1,4 +1,4 @@
-package AdminPackage.AdminEntity;
+package adminpackage.adminentity;
 
 public class AdminFromList {
     int id;

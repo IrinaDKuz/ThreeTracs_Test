@@ -1,10 +1,10 @@
-package Helper;
+package helper;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
-import static AdminPackage.Auth.KEY;
+import static adminpackage.Auth.KEY;
 
 public class GetPost {
     public static String getMethod(String path) {

@@ -1,12 +1,12 @@
-package AdminPackage;
+package adminpackage;
 
-import AdminPackage.AdminEntity.AdminFromList;
+import adminpackage.adminentity.AdminFromList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static AdminPackage.Auth.*;
+import static adminpackage.Auth.*;
 
-import static Helper.GetPost.getMethod;
+import static helper.GetPost.getMethod;
 
 public class GetAdmin {
 
