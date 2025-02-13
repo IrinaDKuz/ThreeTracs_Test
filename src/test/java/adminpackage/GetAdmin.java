@@ -31,12 +31,33 @@ public class GetAdmin {
             adminFromList.setEmail(adminJson.getString("email"));
             // TODO: Заполнить остальное кроме роль
             adminFromList.setStatus(adminJson.getString("status"));
+            adminFromList.setFirstName(adminJson.getString("firstName"));
+            adminFromList.setSecondName(adminJson.getString("secondName"));
+            adminFromList.setSkype(adminJson.getString("skype"));
+            adminFromList.setTelegram(adminJson.getString("telegram"));
+            adminFromList.setPhone(adminJson.getString("phone"));
+            adminFromList.setLastLoginIp(adminJson.getString("lastLoginIp"));
+            adminFromList.setLastLoginDt(adminJson.getString("lastLoginDt"));
+            adminFromList.setWorkingHours(adminJson.getString("workingHours"));
+            adminFromList.setUpdatedAt(adminJson.getString("updatedAt"));
+            adminFromList.setCreatedAt(adminJson.getString("createdAt"));
+
 
 
 
             System.out.println(adminFromList.getId());
             System.out.println(adminFromList.getEmail());
             System.out.println(adminFromList.getStatus());
+            System.out.println(adminFromList.getFirstName());
+            System.out.println(adminFromList.getSecondName());
+            System.out.println(adminFromList.getSkype());
+            System.out.println(adminFromList.getTelegram());
+            System.out.println(adminFromList.getPhone());
+            System.out.println(adminFromList.getLastLoginIp());
+            System.out.println(adminFromList.getLastLoginDt());
+            System.out.println(adminFromList.getWorkingHours());
+            System.out.println(adminFromList.getUpdatedAt());
+            System.out.println(adminFromList.getCreatedAt());
 
 
         }
