@@ -5,18 +5,22 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import static adminpackage.Auth.*;
 
 import static helper.GetPost.getMethod;
 
 public class GetAdmin {
+    public static ArrayList<AdminFromList> ADMINS = new ArrayList<>();
 
     @Test
     public static void getAdmins() {
         String path = DEV_API_NODE + "/admin/";
         String responseString = getMethod(path);
 
-      //  System.out.println("Ответ на get: " + responseString);
+        //  System.out.println("Ответ на get: " + responseString);
         // attachJson(responseBody, GET_RESPONSE);
 
         JSONObject jsonObject = new JSONObject(responseString);
@@ -42,31 +46,37 @@ public class GetAdmin {
             adminFromList.setUpdatedAt(adminJson.isNull("updatedAt") ? null : adminJson.getString("updatedAt"));
             adminFromList.setCreatedAt(adminJson.isNull("createdAt") ? null : adminJson.getString("createdAt"));
 
-
-            System.out.println(adminFromList.getId());
-            System.out.println(adminFromList.getEmail());
-            System.out.println(adminFromList.getStatus());
-            System.out.println(adminFromList.getFirstName());
-            System.out.println(adminFromList.getSecondName());
-            System.out.println(adminFromList.getSkype());
-            System.out.println(adminFromList.getTelegram());
-            System.out.println(adminFromList.getPhone());
-            System.out.println(adminFromList.getLastLoginIp());
-            System.out.println(adminFromList.getLastLoginDt());
-            System.out.println(adminFromList.getWorkingHours());
-            System.out.println(adminFromList.getUpdatedAt());
-            System.out.println(adminFromList.getCreatedAt());
-
-
+            ADMINS.add(adminFromList);
         }
     }
 
     public static void getAdmin(int id) {
         String path = DEV_API_NODE + "/admin/" + id;
         System.out.println(path);
-        String responseString = getMethod(path);;
-      //  System.out.println(responseString);
+        String responseString = getMethod(path);
+        ;
+        //  System.out.println(responseString);
     }
+
+    public static Integer getRandomEnableAdmin(ArrayList<AdminFromList> ADMINS) {
+        ArrayList<Integer> adminsIds = new ArrayList<>();
+
+        for (int i = 0; i < ADMINS.size(); i++) {
+
+            String status = ADMINS.get(i).getStatus();
+            // TODO: equals() = соответсвие
+            if (status.equals("enabled")) {
+                adminsIds.add(ADMINS.get(i).getId());
+            }
+        }
+        // TODO: взять рандомный
+        Integer randomId = adminsIds.get(new Random().nextInt(adminsIds.size()));
+        return randomId;
+    }
+
+
+    // TODO: ВОТ ТУТ СДЕЛАТЬ МЕТОД КОТОРЫЙ ВОЗВРАЩАЕТ РАНДОМНОЕ NAME АДМИНА
+    
 
 
 }
