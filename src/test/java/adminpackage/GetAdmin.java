@@ -29,20 +29,18 @@ public class GetAdmin {
 
             adminFromList.setId(adminJson.getInt("id"));
             adminFromList.setEmail(adminJson.getString("email"));
-            // TODO: Заполнить остальное кроме роль
             adminFromList.setStatus(adminJson.getString("status"));
             adminFromList.setFirstName(adminJson.getString("firstName"));
             adminFromList.setSecondName(adminJson.getString("secondName"));
-            adminFromList.setSkype(adminJson.getString("skype"));
-            adminFromList.setTelegram(adminJson.getString("telegram"));
-            adminFromList.setPhone(adminJson.getString("phone"));
-            adminFromList.setLastLoginIp(adminJson.getString("lastLoginIp"));
-            adminFromList.setLastLoginDt(adminJson.getString("lastLoginDt"));
-            adminFromList.setWorkingHours(adminJson.getString("workingHours"));
-            adminFromList.setUpdatedAt(adminJson.getString("updatedAt"));
-            adminFromList.setCreatedAt(adminJson.getString("createdAt"));
 
-
+            adminFromList.setSkype(adminJson.isNull("skype") ? null : adminJson.getString("skype"));
+            adminFromList.setTelegram(adminJson.isNull("telegram") ? null : adminJson.getString("telegram"));
+            adminFromList.setPhone(adminJson.isNull("phone") ? null : adminJson.getString("phone"));
+            adminFromList.setLastLoginIp(adminJson.isNull("lastLoginIp") ? null : adminJson.getString("lastLoginIp"));
+            adminFromList.setLastLoginDt(adminJson.isNull("lastLoginDt") ? null : adminJson.getString("lastLoginDt"));
+            adminFromList.setWorkingHours(adminJson.isNull("workingHours") ? null : adminJson.getString("workingHours"));
+            adminFromList.setUpdatedAt(adminJson.isNull("updatedAt") ? null : adminJson.getString("updatedAt"));
+            adminFromList.setCreatedAt(adminJson.isNull("createdAt") ? null : adminJson.getString("createdAt"));
 
 
             System.out.println(adminFromList.getId());
