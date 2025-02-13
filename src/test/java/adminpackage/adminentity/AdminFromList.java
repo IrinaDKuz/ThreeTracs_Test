@@ -21,7 +21,6 @@ public class AdminFromList {
         String label;
     }
 
-
     public int getId() {
         return id;
     }
