@@ -11,7 +11,7 @@ public class AdminFromList {
     String telegram;
     String phone;
     String lastLoginIp;
-    Object lastLoginDt;
+    String lastLoginDt;
     String workingHours;
     String updatedAt;
     String createdAt;
@@ -106,7 +106,7 @@ public class AdminFromList {
         return lastLoginDt;
     }
 
-    public void setLastLoginDt(Object lastLoginDt) {
+    public void setLastLoginDt(String lastLoginDt) {
         this.lastLoginDt = lastLoginDt;
     }
 
