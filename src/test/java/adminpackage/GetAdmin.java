@@ -50,7 +50,7 @@ public class GetAdmin {
             adminFromList.setCreatedAt(adminJson.isNull("createdAt") ? null : adminJson.getString("createdAt"));
 
             // ВОТ ТУТ ВОПРОС... ПОГУГЛИЛ ЧТО МЫ ТАК ДОБАВЛЯЕМ АДМИНА В СПИСОК, НО НЕ ПОНЯЛ
-            ADMINS.add(adminFromList);
+            ADMINS.add(adminFromList); // adminFromList - каждый новый админ в цикле. записываем в ADMINS
         }
     }
 
@@ -76,7 +76,7 @@ public class GetAdmin {
             }
         }
         // TODO: взять рандомный id админа
-        Integer randomId = adminsIds.get(new Random().nextInt(adminsIds.size()));
+        Integer randomId = adminsIds.get(new Random().nextInt(adminsIds.size())); // создаем переменную randomId
         return randomId;
     }
 
@@ -84,10 +84,16 @@ public class GetAdmin {
     // TODO: ВОТ ТУТ СДЕЛАТЬ МЕТОД КОТОРЫЙ ВОЗВРАЩАЕТ РАНДОМНОЕ NAME АДМИНА
     // возвращаем строку (имя) случайного админа со статусом enable
     public static String getRandomEnableAdminFirstName(ArrayList<AdminFromList> ADMINS) {
-        ArrayList<String> adminsFirstNames = new ArrayList<>();
+        ArrayList<String> adminsFirstNames = new ArrayList<>(); // создаем список куда быдем записывать firstName админов
 
-        //проходим по всем вдминам
-        for (string )
+        //проходим по всем админам
+        for (int i = 0; i < ADMINS.size(); i++) { // не меняется (статичная)
+            String status = ADMINS.get(i).getStatus(); // может изменяться, но не меняется (смотрим статус)
+            if (status.equals("enabled")) { // выбираем со статусом "enabled"
+            adminsFirstNames.add(ADMINS.get(i).getFirstName()); // записали FirstName админа в список, если у него статус "enabled"
+        }
+    }
+    String firstName = adminsFirstNames.get(new Random().nextInt()
 
 
 }
