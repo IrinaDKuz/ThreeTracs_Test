@@ -93,7 +93,8 @@ public class GetAdmin {
             adminsFirstNames.add(ADMINS.get(i).getFirstName()); // записали FirstName админа в список, если у него статус "enabled"
         }
     }
-    String firstName = adminsFirstNames.get(new Random().nextInt()
-
+    String firstName = adminsFirstNames.get(new Random().nextInt(adminsFirstNames.size()));
+    return firstName;
+    }
 
 }
