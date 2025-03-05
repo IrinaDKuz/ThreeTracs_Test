@@ -1,6 +1,8 @@
 package adminpackage.adminentity;
+import net.datafaker.Faker;
 
-public class AdminFromList {
+
+public class AdminEntity {
     int id;
     String email;
     String status;
@@ -16,9 +18,26 @@ public class AdminFromList {
     String updatedAt;
     String createdAt;
 
+    String password;
+
     public class Role {
         int value;
         String label;
+    }
+
+    public void generateFields() {
+      //  https://fakerjs.dev/api/person.html
+        Faker faker = new Faker();
+        this.status = "enabled";
+       // this.role = "enable"; TODO: Сделать роль
+        this.password = "password";
+        this.firstName = faker.name().firstName();
+        this.secondName = faker.name().lastName();
+        this.email =  faker.internet().emailAddress(this.firstName+this.secondName);
+        this.skype = "live:" + faker.dessert().flavor();
+        this.telegram = "@" + faker.dessert().topping();
+        this.phone = faker.phoneNumber().cellPhone();
+        this.workingHours = "10:00 - 18:00";
     }
 
     public int getId() {
@@ -131,6 +150,14 @@ public class AdminFromList {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

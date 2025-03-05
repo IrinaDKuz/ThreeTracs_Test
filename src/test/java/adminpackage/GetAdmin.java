@@ -1,6 +1,6 @@
 package adminpackage;
 
-import adminpackage.adminentity.AdminFromList;
+import adminpackage.adminentity.AdminEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.annotations.Test;
@@ -13,7 +13,7 @@ import static adminpackage.Auth.*;
 import static helper.GetPost.getMethod;
 
 public class GetAdmin {
-    public static ArrayList<AdminFromList> ADMINS = new ArrayList<>(); // ArrayList здесь хранятся все админы
+    public static ArrayList<AdminEntity> ADMINS = new ArrayList<>(); // ArrayList здесь хранятся все админы
 
     @Test
     public static void getAdmins() { 
@@ -29,28 +29,28 @@ public class GetAdmin {
 
 // проходимся по всем админам
         for (int i = 0; i < adminArray.length(); i++) {
-            AdminFromList adminFromList = new AdminFromList();
+            AdminEntity admin = new AdminEntity();
             JSONObject adminJson = adminArray.getJSONObject(i);
 
             // из json заполняем наш лист с админами данными
-            adminFromList.setId(adminJson.getInt("id"));
-            adminFromList.setEmail(adminJson.getString("email"));
-            adminFromList.setStatus(adminJson.getString("status"));
-            adminFromList.setFirstName(adminJson.getString("firstName"));
-            adminFromList.setSecondName(adminJson.getString("secondName"));
+            admin.setId(adminJson.getInt("id"));
+            admin.setEmail(adminJson.getString("email"));
+            admin.setStatus(adminJson.getString("status"));
+            admin.setFirstName(adminJson.getString("firstName"));
+            admin.setSecondName(adminJson.getString("secondName"));
 
             // указываем, что если в json ответе null, то в наш фал пишем null
-            adminFromList.setSkype(adminJson.isNull("skype") ? null : adminJson.getString("skype"));
-            adminFromList.setTelegram(adminJson.isNull("telegram") ? null : adminJson.getString("telegram"));
-            adminFromList.setPhone(adminJson.isNull("phone") ? null : adminJson.getString("phone"));
-            adminFromList.setLastLoginIp(adminJson.isNull("lastLoginIp") ? null : adminJson.getString("lastLoginIp"));
-            adminFromList.setLastLoginDt(adminJson.isNull("lastLoginDt") ? null : adminJson.getString("lastLoginDt"));
-            adminFromList.setWorkingHours(adminJson.isNull("workingHours") ? null : adminJson.getString("workingHours"));
-            adminFromList.setUpdatedAt(adminJson.isNull("updatedAt") ? null : adminJson.getString("updatedAt"));
-            adminFromList.setCreatedAt(adminJson.isNull("createdAt") ? null : adminJson.getString("createdAt"));
+            admin.setSkype(adminJson.isNull("skype") ? null : adminJson.getString("skype"));
+            admin.setTelegram(adminJson.isNull("telegram") ? null : adminJson.getString("telegram"));
+            admin.setPhone(adminJson.isNull("phone") ? null : adminJson.getString("phone"));
+            admin.setLastLoginIp(adminJson.isNull("lastLoginIp") ? null : adminJson.getString("lastLoginIp"));
+            admin.setLastLoginDt(adminJson.isNull("lastLoginDt") ? null : adminJson.getString("lastLoginDt"));
+            admin.setWorkingHours(adminJson.isNull("workingHours") ? null : adminJson.getString("workingHours"));
+            admin.setUpdatedAt(adminJson.isNull("updatedAt") ? null : adminJson.getString("updatedAt"));
+            admin.setCreatedAt(adminJson.isNull("createdAt") ? null : adminJson.getString("createdAt"));
 
             // ВОТ ТУТ ВОПРОС... ПОГУГЛИЛ ЧТО МЫ ТАК ДОБАВЛЯЕМ АДМИНА В СПИСОК, НО НЕ ПОНЯЛ
-            ADMINS.add(adminFromList); // adminFromList - каждый новый админ в цикле. записываем в ADMINS
+            ADMINS.add(admin); // adminFromList - каждый новый админ в цикле. записываем в ADMINS
         }
     }
 
@@ -63,7 +63,7 @@ public class GetAdmin {
         //  System.out.println(responseString);
     }
 
-    public static Integer getRandomEnableAdmin(ArrayList<AdminFromList> ADMINS) {
+    public static Integer getRandomEnableAdmin(ArrayList<AdminEntity> ADMINS) {
         ArrayList<Integer> adminsIds = new ArrayList<>(); // создали список где будут храниться id админов
 
         // проходимся по всем админам в списке
@@ -83,7 +83,7 @@ public class GetAdmin {
 
     // TODO: ВОТ ТУТ СДЕЛАТЬ МЕТОД КОТОРЫЙ ВОЗВРАЩАЕТ РАНДОМНОЕ NAME АДМИНА
     // возвращаем строку (имя) случайного админа со статусом enable
-    public static String getRandomEnableAdminFirstName(ArrayList<AdminFromList> ADMINS) {
+    public static String getRandomEnableAdminFirstName(ArrayList<AdminEntity> ADMINS) {
         ArrayList<String> adminsFirstNames = new ArrayList<>(); // создаем список куда быдем записывать firstName админов
 
         //проходим по всем админам
