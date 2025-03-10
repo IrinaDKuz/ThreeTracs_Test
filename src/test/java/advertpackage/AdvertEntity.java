@@ -1,43 +1,35 @@
-package adminpackage.adminentity;
+package advertpackage.advertentity;
+import java.util.ArrayList;
+
 import net.datafaker.Faker;
 
 
-public class AdminEntity { //поля, которые заполняются на админа
+public class AdvertEntity { //поля, которые заполняются на адверта *
     int id;
-    String email;
-    String status;
-    Role role;
-    String firstName;
-    String secondName;
-    String skype;
-    String telegram;
-    String phone;
-    String lastLoginIp;
-    String lastLoginDt;
-    String workingHours;
-    String updatedAt;
-    String createdAt;
+    String name;
+    String legalname;
+    String status; 
+    int categories;
+    String geo;
+    String pricingModel;
+    String note;
+    int managerId;
+    int accountManager;
+    int salesManager;
+    String siteUrl;
+    ArrayList <Integer> tagsId;
+    ArrayList <String> tagsName; 
+    String companyLegalname;
+    int userRequestSource;
 
-    String password;
 
-    public class Role {
-        int value;
-        String label;
-    }
-
-    public void generateFields() { //генерирует случайное заполнение полей
+    public void generateMinFields() { //генерирует случайное заполнение полей
       //  https://fakerjs.dev/api/person.html
         Faker faker = new Faker(); //создаем новую сущность (факер - это библиотека рандомных значений)
         this.status = "enabled"; //ставим статус энейбл
        // this.role = "enable"; TODO: Сделать роль
-        this.password = "password"; //пароль для нового админа
+        this.name = faker.animal().scientificName(); //пароль для нового админа
         this.firstName = faker.name().firstName(); //генерим рандомное имя
-        this.secondName = faker.name().lastName(); //генерим рандомное имя
-        this.email =  faker.internet().emailAddress(this.firstName+this.secondName); //геерим рандомную почту
-        this.skype = "live:" + faker.dessert().flavor(); //генерим почту
-        this.telegram = "@" + faker.dessert().topping(); // генерим почту
-        this.phone = faker.phoneNumber().cellPhone(); //генерим номер телефона
-        this.workingHours = "10:00 - 18:00"; //время работы - захардкожено
     }
 
     public int getId() { //ЗАБЫЛ ДЛЯ ЧЕГО ЭТО

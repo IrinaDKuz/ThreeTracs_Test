@@ -13,9 +13,9 @@ import static io.restassured.RestAssured.given;
 
 
 public class Auth {
-    public static String KEY;
+    public static String KEY; //тут прописаны все ключи на админов
 
-    public static final String DEV_NODE = "https://admin.3tracks.link/";
+    public static final String DEV_NODE = "https://admin.3tracks.link/"; 
     public static final String DEV_API_NODE = "https://api.admin.3tracks.link";
 
     static Map<Integer, Map<String, String>> USERS = new HashMap<>() {

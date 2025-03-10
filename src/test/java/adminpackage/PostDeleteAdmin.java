@@ -13,15 +13,16 @@ import static helper.ConstantsName.*;
 import static helper.GetPost.deleteMethod;
 import static helper.GetPost.postMethod;
 
-public class PostDeleteAdmin {
+public class PostDeleteAdmin { //создаем новый класс
 
-    @Test
-    public static void createNewAdmin() {
-        authApi(104);
-        AdminEntity newAdmin = new AdminEntity();
-        newAdmin.generateFields();
-        postNewAdmin(newAdmin);
+    @Test // начало теста
+    public static void createNewAdmin() { //создаем нового админа
+        authApi(104); //авторизовываемся в система (под 104-м админом)
+        AdminEntity newAdmin = new AdminEntity(); //создаем нового админа
+        newAdmin.generateFields(); //заполняем новому админу поля из файла AdminEntity
+        postNewAdmin(newAdmin); //отправляем заполненные данные на нового админа
 
+        // расписать до сюда
         newAdmin.generateFields();
         postEditAdmin(newAdmin);
 
@@ -39,7 +40,7 @@ public class PostDeleteAdmin {
         System.out.println(newAdmin.getId());
         // Allure.step("Ответ на add: " + responseBody);
     }
-
+// разобрать до сюда
 
     public static void postEditAdmin(AdminEntity editAdmin) {
         Gson gson = new Gson();
