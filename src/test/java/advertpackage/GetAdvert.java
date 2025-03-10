@@ -1,54 +1,132 @@
 package advertpackage;
 
-import adminpackage.adminentity.AdminEntity;
+import adminpackage.Auth;
+import advertpackage.advertentity.AdvertBasicInfoEntity;
+import advertpackage.advertentity.AdvertContactEntity;
+import advertpackage.advertentity.AdvertContactEntity.Messenger;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.StreamSupport;
 
 import static adminpackage.Auth.DEV_API_NODE;
+import static adminpackage.Auth.authApi;
 import static helper.GetPost.getMethod;
 
 public class GetAdvert {
-    public static ArrayList<AdvertEntity> ADVERTS = new ArrayList<>();
+    public static ArrayList<AdvertBasicInfoEntity> ADVERTS = new ArrayList<>();
     public static ArrayList<Integer> ADVERTS_IDS = new ArrayList<>();
 
-
     @Test
-    public static void getAdverts() {
-        String path = DEV_API_NODE + "/advertisers/";
+    public static void test() {
+        authApi(104);
+        System.out.println(getAdvertContact(1362).getFirst().getEmail());
+    }
+
+        public static AdvertBasicInfoEntity getAdvertBasicInfo(int id) {
+        String path = DEV_API_NODE + "/advert/" + id;
         String responseString = getMethod(path);
 
         JSONObject jsonObject = new JSONObject(responseString);
         JSONObject data = jsonObject.getJSONObject("data");
-        JSONArray advertsArray = data.getJSONArray("adverts");
 
-        for (int i = 0; i < advertsArray.length(); i++) {
-            AdminEntity admin = new AdminEntity();
-            JSONObject adminJson = advertsArray.getJSONObject(i);
+        AdvertBasicInfoEntity advertBasicInfo = new AdvertBasicInfoEntity();
 
-            // из json заполняем наш лист с админами данными
-            admin.setId(adminJson.getInt("id"));
-            admin.setEmail(adminJson.getString("email"));
-            admin.setStatus(adminJson.getString("status"));
-            admin.setFirstName(adminJson.getString("firstName"));
-            admin.setSecondName(adminJson.getString("secondName"));
+        advertBasicInfo.setId(data.getInt("id"));
+        advertBasicInfo.setStatus(data.getString("status"));
 
-            // указываем, что если в json ответе null, то в наш фал пишем null
-            admin.setSkype(adminJson.isNull("skype") ? null : adminJson.getString("skype"));
-            admin.setTelegram(adminJson.isNull("telegram") ? null : adminJson.getString("telegram"));
-            admin.setPhone(adminJson.isNull("phone") ? null : adminJson.getString("phone"));
-            admin.setLastLoginIp(adminJson.isNull("lastLoginIp") ? null : adminJson.getString("lastLoginIp"));
-            admin.setLastLoginDt(adminJson.isNull("lastLoginDt") ? null : adminJson.getString("lastLoginDt"));
-            admin.setWorkingHours(adminJson.isNull("workingHours") ? null : adminJson.getString("workingHours"));
-            admin.setUpdatedAt(adminJson.isNull("updatedAt") ? null : adminJson.getString("updatedAt"));
-            admin.setCreatedAt(adminJson.isNull("createdAt") ? null : adminJson.getString("createdAt"));
+        advertBasicInfo.setName(data.isNull("name") ? null : data.getString("name"));
+        advertBasicInfo.setCompanyLegalName(data.isNull("companyLegalname") ? null : data.getString("companyLegalname"));
+        // advertBasicInfo.setRegistrationNumber(data.getString("registrationNumber"));
+        advertBasicInfo.setSiteUrl(data.isNull("siteUrl") ? null : data.getString("siteUrl"));
+        advertBasicInfo.setManagerId(data.isNull("managerId") ? null : data.getInt("managerId"));
+        advertBasicInfo.setSalesManager(data.isNull("salesManager") ? null : data.getInt("salesManager"));
+        advertBasicInfo.setAccountManager(data.isNull("accountManager") ? null : data.getInt("accountManager"));
+        advertBasicInfo.setUserRequestSource(data.isNull("userRequestSource") ? null : data.getInt("userRequestSource"));
+        advertBasicInfo.setNote(data.isNull("note") ? null : data.getString("note"));
 
-            // ВОТ ТУТ ВОПРОС... ПОГУГЛИЛ ЧТО МЫ ТАК ДОБАВЛЯЕМ АДМИНА В СПИСОК, НО НЕ ПОНЯЛ
-            ADMINS.add(admin); // adminFromList - каждый новый админ в цикле. записываем в ADMINS
+        JSONObject offer = data.getJSONObject("offer");
+        // advertBasicInfo.setActiveOffersCount(parseUnknownValueToInteger(offer, "active"));
+        // advertBasicInfo.setInactiveOffersCount(parseUnknownValueToInteger(offer, "inactive"));
+        // advertBasicInfo.setTotalOffersCount(offer.getInt("total"));
+        // advertBasicInfo.setDraftOffersCount(offer.getInt("draft"));
+
+        if (data.get("pricingModel") instanceof JSONArray) {
+            JSONArray pricingModelArray = data.getJSONArray("pricingModel");
+            List<String> listArray = StreamSupport.stream(pricingModelArray.spliterator(), false)
+                    .map(Object::toString)
+                    .toList();
+            advertBasicInfo.setPricingModel(listArray);
+        } else advertBasicInfo.setPricingModel(null);
+
+        if (data.get("geo") instanceof JSONArray) {
+            JSONArray geoArray = data.getJSONArray("geo");
+            List<String> listArray = StreamSupport.stream(geoArray.spliterator(), false)
+                    .map(Object::toString)
+                    .toList();
+            advertBasicInfo.setGeo(listArray);
+        } else advertBasicInfo.setGeo(null);
+
+        if (data.get("categories") instanceof JSONArray) {
+            JSONArray categoriesArray = data.getJSONArray("categories");
+            Set<Integer> categoriesIdList = new HashSet<>();
+            for (int i = 0; i < categoriesArray.length(); i++) {
+                int value = categoriesArray.getInt(i);
+                categoriesIdList.add(value);
+            }
+            advertBasicInfo.setCategories(categoriesIdList);
+        } else advertBasicInfo.setCategories(null);
+
+        if (data.get("tag") instanceof JSONArray) {
+            JSONArray tagArray = data.getJSONArray("tag");
+            Set<Integer> tagIdList = new HashSet<>();
+            for (int i = 0; i < tagArray.length(); i++) {
+                int value = tagArray.getInt(i);
+                tagIdList.add(value);
+            }
+            advertBasicInfo.setTagsId(tagIdList);
+        } else advertBasicInfo.setTagsId(null);
+        return advertBasicInfo;
+    }
+
+    public static ArrayList<AdvertContactEntity> getAdvertContact(int id) {
+
+        ArrayList<AdvertContactEntity> contactsList = new ArrayList<>();
+
+        String path = DEV_API_NODE + "/advert/" + id + "/contact";
+        String responseString = getMethod(path);
+
+        JSONObject jsonObject = new JSONObject(responseString);
+        JSONArray dataArray = jsonObject.getJSONArray("data");
+
+        for (int i = 0; i < dataArray.length(); i++) {
+            AdvertContactEntity advertContact = new AdvertContactEntity();
+            JSONObject dataObject = dataArray.getJSONObject(i);
+            advertContact.setContactID(dataObject.getInt("id"));
+            advertContact.setPerson(dataObject.getString("person"));
+            advertContact.setStatus(dataObject.getString("status"));
+            advertContact.setEmail(dataObject.isNull("email")? null : dataObject.getString("email"));
+            advertContact.setPosition(dataObject.isNull("position") ? null : dataObject.getString("position"));
+
+            JSONArray messengersArray = dataObject.getJSONArray("messengers");
+            ArrayList<Messenger> messengers = new ArrayList<>();
+            for (int j = 0; j < messengersArray.length(); j++) {
+                JSONObject messengerObject = messengersArray.getJSONObject(j);
+                Messenger messenger = new Messenger();
+                messenger.setMessengerId(messengerObject.getInt("id"));
+                messenger.setMessengerTypeId(messengerObject.getInt("messengerId"));
+                messenger.setMessengerValue(messengerObject.getString("value"));
+                messengers.add(messenger);
+            }
+            advertContact.setMessengers(messengers);
+            contactsList.add(advertContact);
         }
+        return contactsList;
     }
 
     public static void getAdvertsIds() {
@@ -65,16 +143,9 @@ public class GetAdvert {
         }
     }
 
-    public static void getAdvert(int id) {
-        String path = DEV_API_NODE + "/admin/" + id; // урл запроса инфы на админа с конкретным id
-        System.out.println(path); // выводим урл в терминал
-        String responseString = getMethod(path); // отправляем гет запрос
-
-    }
-
     public static Integer getRandomAdvert() {
+        if (ADVERTS_IDS.isEmpty())
+            getAdvertsIds();
         return ADVERTS_IDS.get(new Random().nextInt(ADVERTS_IDS.size()));
     }
-    
-
 }

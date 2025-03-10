@@ -13,6 +13,6 @@ public class TestMainClass {
         getAdmins();
         getAdmin(103);
         System.out.println(ADMINS.get(3).getFirstName());
-        System.out.println(getRandomEnableAdmin(ADMINS));
+        System.out.println(getRandomEnableAdmin());
     }
 }

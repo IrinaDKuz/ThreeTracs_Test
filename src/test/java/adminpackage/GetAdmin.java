@@ -54,7 +54,6 @@ public class GetAdmin {
         }
     }
 
-    
     public static void getAdmin(int id) {
         String path = DEV_API_NODE + "/admin/" + id; // урл запроса инфы на админа с конкретным id
         System.out.println(path); // выводим урл в терминал
@@ -63,38 +62,21 @@ public class GetAdmin {
         //  System.out.println(responseString);
     }
 
-    public static Integer getRandomEnableAdmin(ArrayList<AdminEntity> ADMINS) {
+    public static Integer getRandomEnableAdmin() {
+        if (ADMINS.isEmpty())
+            getAdmins();
+
         ArrayList<Integer> adminsIds = new ArrayList<>(); // создали список где будут храниться id админов
 
         // проходимся по всем админам в списке
         for (int i = 0; i < ADMINS.size(); i++) {
 
             String status = ADMINS.get(i).getStatus();
-            // TODO: equals() = соответсвие
             if (status.equals("enabled")) {
                 adminsIds.add(ADMINS.get(i).getId());
             }
         }
-        // TODO: взять рандомный id админа
         Integer randomId = adminsIds.get(new Random().nextInt(adminsIds.size())); // создаем переменную randomId
         return randomId;
     }
-
-
-    // TODO: ВОТ ТУТ СДЕЛАТЬ МЕТОД КОТОРЫЙ ВОЗВРАЩАЕТ РАНДОМНОЕ NAME АДМИНА
-    // возвращаем строку (имя) случайного админа со статусом enable
-    public static String getRandomEnableAdminFirstName(ArrayList<AdminEntity> ADMINS) {
-        ArrayList<String> adminsFirstNames = new ArrayList<>(); // создаем список куда быдем записывать firstName админов
-
-        //проходим по всем админам
-        for (int i = 0; i < ADMINS.size(); i++) { // не меняется (статичная)
-            String status = ADMINS.get(i).getStatus(); // может изменяться, но не меняется (смотрим статус)
-            if (status.equals("enabled")) { // выбираем со статусом "enabled"
-            adminsFirstNames.add(ADMINS.get(i).getFirstName()); // записали FirstName админа в список, если у него статус "enabled"
-        }
-    }
-    String firstName = adminsFirstNames.get(new Random().nextInt(adminsFirstNames.size()));
-    return firstName;
-    }
-
 }
