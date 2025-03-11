@@ -70,11 +70,11 @@ public class AdvertContactEntity {
     }
 
 
-    public void fillAdvertContactWithRandomData() throws Exception {
+    public void generateContactFields() {
         Faker faker = new Faker();
         this.person =  faker.name().fullName();
         this.status = "active";
-        this.email =  faker.internet().emailAddress(this.person);
+        this.email =  faker.internet().emailAddress(this.person.replace(" ",""));
         this.position = faker.pokemon().name();
 
         ArrayList<Messenger> messengers = new ArrayList<>();

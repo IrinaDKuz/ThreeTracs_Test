@@ -167,7 +167,7 @@ public class GetAdvert {
         }
         return advertPaymentInfoEntity;
     }
-    
+
     public static void getAdvertsIds() {
         String path = DEV_API_NODE + "/advertisers/";
         String responseString = getMethod(path);

@@ -36,7 +36,7 @@ public class PostDeleteAdmin { //создаем новый класс
         String responseBody = postMethod(DEV_API_NODE + "/admin/new", jsonObject);
         System.out.println(ADD_RESPONSE + responseBody);
 
-        newAdmin.setId(getAdminIdFromResponse(responseBody));
+        newAdmin.setId(getEntityIdFromResponse(responseBody));
         System.out.println(newAdmin.getId());
         // Allure.step("Ответ на add: " + responseBody);
     }
@@ -52,7 +52,7 @@ public class PostDeleteAdmin { //создаем новый класс
     }
 
 
-    public static int getAdminIdFromResponse(String responseBody) {
+    public static int getEntityIdFromResponse(String responseBody) {
         JSONObject jsonObject = new JSONObject(responseBody); // парсим поулченный json
         JSONObject data = jsonObject.getJSONObject("data"); // берем data
         Integer id = data.getInt("id");

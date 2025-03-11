@@ -1,10 +1,15 @@
 package advertpackage.advertentity;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 import net.datafaker.Faker;
 
 import static adminpackage.GetAdmin.getRandomEnableAdmin;
+import static helper.ConstantsName.ADVERT_STATUS_MAP;
+import static helper.ConstantsName.MODEL_TYPES_MAP;
+import static helper.GeoHelper.*;
+import static settingspackage.GetCategory.getRandomCategory;
+import static settingspackage.GetTag.getRandomTag;
 
 
 public class AdvertBasicInfoEntity { //поля, которые заполняются на адверта *
@@ -12,28 +17,49 @@ public class AdvertBasicInfoEntity { //поля, которые заполняю
     String name;
     String companyLegalName;
     String status;
-    Set<Integer> categories;
-    List <String> geo;
-    List <String> pricingModel;
+    Set<Integer> categories = new HashSet<>();
+    List<String> geo = new ArrayList<>();
+    List<String> pricingModel = new ArrayList<>();
     String note;
     int managerId;
     int accountManager;
     int salesManager;
     String siteUrl;
-    Set<Integer> tagsId;
+    Set<Integer> tagsId = new HashSet<>();
     int userRequestSource;
 
 
     public void generateMinFields() {
         Faker faker = new Faker(); //создаем новую сущность (факер - это библиотека рандомных значений)
-        this.status = "enabled"; //ставим статус энейбл
+        this.status = getRandomKey(ADVERT_STATUS_MAP);
         this.name = faker.animal().scientificName(); //пароль для нового админа
         this.managerId = getRandomEnableAdmin();
     }
 
     public void generateMaxFields() {
-        Faker faker = new Faker(); //создаем новую сущность (факер - это библиотека рандомных значений)
+        Faker faker = new Faker();
         this.generateMinFields();
+
+        int count = new Random().nextInt(5) + 1;
+        for (int i = 0; i < count; i++) {
+            this.categories.add(getRandomCategory());
+        }
+
+        for (int i = 0; i < count; i++) {
+            this.geo.add(getRandomKey(GEO_MAP));
+        }
+
+        for (int i = 0; i < count; i++) {
+            this.tagsId.add(getRandomTag());
+        }
+
+        this.pricingModel = Arrays.asList(getRandomKey(MODEL_TYPES_MAP));
+        this.note = faker.text().toString();
+        this.accountManager = getRandomEnableAdmin();
+        this.salesManager = getRandomEnableAdmin();
+        this.userRequestSource = getRandomEnableAdmin();
+        this.siteUrl = faker.internet().url();
+        this.companyLegalName = faker.artist().name();
     }
 
     public int getId() {
@@ -147,8 +173,6 @@ public class AdvertBasicInfoEntity { //поля, которые заполняю
     public void setUserRequestSource(int userRequestSource) {
         this.userRequestSource = userRequestSource;
     }
-
-
 
 
 }

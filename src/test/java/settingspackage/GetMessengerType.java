@@ -24,7 +24,7 @@ public class GetMessengerType {
 
             JSONObject messengerJson = data.getJSONObject(i);
             JSONObject generalJson = messengerJson.getJSONObject("general");
-            Integer id = messengerJson.getInt("id");
+            Integer id = generalJson.getInt("id");
             MESSENGERS_IDS.add(id);
         }
     }
