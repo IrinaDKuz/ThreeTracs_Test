@@ -44,7 +44,7 @@ public class PostAdvert {
         // Allure.step("Редактируем Primary Info Адверта id=" + advertId);
         AdvertBasicInfoEntity advertBasicInfoEdit = new AdvertBasicInfoEntity();
         advertBasicInfoEdit.generateMaxFields();
-        advertBasicInfoEdit.setId(advertBasicInfoEdit.getId());
+        advertBasicInfoEdit.setId(advertBasicInfo.getId());
 
         basicInfoAddEdit(true, advertBasicInfoEdit);
 
