@@ -1,12 +1,10 @@
 package advertpackage;
 
-import adminpackage.Auth;
 import advertpackage.advertentity.AdvertBasicInfoEntity;
 import advertpackage.advertentity.AdvertContactEntity;
 import advertpackage.advertentity.AdvertContactEntity.Messenger;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
+import advertpackage.advertentity.AdvertPaymentInfoEntity;
+import advertpackage.advertentity.AdvertRequisitesEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.annotations.Test;
@@ -25,10 +23,14 @@ public class GetAdvert {
     @Test
     public static void test() {
         authApi(104);
-        System.out.println(getAdvertContact(1362).getFirst().getEmail());
+        int id = getRandomAdvert();
+        System.out.println(id);
+        if (!getAdvertContact(id).isEmpty())
+            System.out.println(getAdvertContact(id).getFirst().getEmail());
+        System.out.println(getAdvertPaymentInfo(id).getMinPayout());
     }
 
-        public static AdvertBasicInfoEntity getAdvertBasicInfo(int id) {
+    public static AdvertBasicInfoEntity getAdvertBasicInfo(int id) {
         String path = DEV_API_NODE + "/advert/" + id;
         String responseString = getMethod(path);
 
@@ -95,7 +97,6 @@ public class GetAdvert {
     }
 
     public static ArrayList<AdvertContactEntity> getAdvertContact(int id) {
-
         ArrayList<AdvertContactEntity> contactsList = new ArrayList<>();
 
         String path = DEV_API_NODE + "/advert/" + id + "/contact";
@@ -110,7 +111,7 @@ public class GetAdvert {
             advertContact.setContactID(dataObject.getInt("id"));
             advertContact.setPerson(dataObject.getString("person"));
             advertContact.setStatus(dataObject.getString("status"));
-            advertContact.setEmail(dataObject.isNull("email")? null : dataObject.getString("email"));
+            advertContact.setEmail(dataObject.isNull("email") ? null : dataObject.getString("email"));
             advertContact.setPosition(dataObject.isNull("position") ? null : dataObject.getString("position"));
 
             JSONArray messengersArray = dataObject.getJSONArray("messengers");
@@ -129,6 +130,37 @@ public class GetAdvert {
         return contactsList;
     }
 
+    public static AdvertPaymentInfoEntity getAdvertPaymentInfo(int id) {
+        AdvertPaymentInfoEntity advertPaymentInfoEntity = new AdvertPaymentInfoEntity();
+
+        String path = DEV_API_NODE + "/advert/" + id + "/payment-info";
+        String responseString = getMethod(path);
+
+        JSONObject jsonObject = new JSONObject(responseString);
+        JSONObject dataObject = jsonObject.getJSONObject("data");
+
+        advertPaymentInfoEntity.setMinPayout(dataObject.isNull("minPayout") ? 0 : dataObject.getFloat("minPayout"));
+        JSONArray dataArray = dataObject.getJSONArray("payments");
+        for (int i = 0; i < dataArray.length(); i++) {
+            AdvertRequisitesEntity advertRequisites = new AdvertRequisitesEntity();
+            JSONObject requisitesObject = dataArray.getJSONObject(i);
+
+            advertRequisites.setRequisitesId(requisitesObject.getInt("id"));
+            advertRequisites.setCurrency(requisitesObject.getString("currency"));
+            advertRequisites.setPaymentSystemId(requisitesObject.getInt("payment"));
+
+            JSONObject requisites = requisitesObject.getJSONObject("requisites");
+            Map<String, String> requisitesMap = new HashMap<>();
+
+            for (String key : requisites.keySet()) {
+                requisitesMap.put(key, requisites.optString(key, ""));
+            }
+            advertRequisites.setRequisites(requisitesMap);
+            advertPaymentInfoEntity.addAdvertRequisitesList(advertRequisites);
+        }
+        return advertPaymentInfoEntity;
+    }
+    
     public static void getAdvertsIds() {
         String path = DEV_API_NODE + "/advertisers/";
         String responseString = getMethod(path);

@@ -3,16 +3,13 @@ package advertpackage.advertentity;
 import net.datafaker.Faker;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
-import static adminpackage.GetAdmin.getRandomEnableAdmin;
 import static helper.TimeHelper.getCurrentDateAndTimeToNumber;
 import static settingspackage.GetMessengerType.getRandomMessengerType;
 
 
-public class AdvertContactEntity { //поля, которые заполняются на адверта *
+public class AdvertContactEntity {
     int contactID;
     String person;
     String status;
@@ -137,6 +134,4 @@ public class AdvertContactEntity { //поля, которые заполняют
     public void setPosition(String position) {
         this.position = position;
     }
-
-
 }
