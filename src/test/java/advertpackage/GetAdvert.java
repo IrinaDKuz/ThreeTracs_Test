@@ -1,20 +1,27 @@
 package advertpackage;
 
+import static adminpackage.Auth.DEV_API_NODE;
+import static adminpackage.Auth.authApi;
+import static helper.GetPost.getMethod;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.StreamSupport;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.testng.annotations.Test;
+
 import advertpackage.advertentity.AdvertBasicInfoEntity;
 import advertpackage.advertentity.AdvertContactEntity;
 import advertpackage.advertentity.AdvertContactEntity.Messenger;
 import advertpackage.advertentity.AdvertPaymentInfoEntity;
 import advertpackage.advertentity.AdvertRequisitesEntity;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.testng.annotations.Test;
-
-import java.util.*;
-import java.util.stream.StreamSupport;
-
-import static adminpackage.Auth.DEV_API_NODE;
-import static adminpackage.Auth.authApi;
-import static helper.GetPost.getMethod;
 
 public class GetAdvert {
     public static ArrayList<AdvertBasicInfoEntity> ADVERTS = new ArrayList<>();
@@ -22,59 +29,59 @@ public class GetAdvert {
 
     @Test
     public static void test() {
-        authApi(104);
-        int id = getRandomAdvert();
-        System.out.println(id);
-        if (!getAdvertContact(id).isEmpty())
-            System.out.println(getAdvertContact(id).getFirst().getEmail());
-        System.out.println(getAdvertPaymentInfo(id).getMinPayout());
+        authApi(104); //авторизуемся 104 админом
+        int id = getRandomAdvert(); //выбираем id рандомного адверта
+        System.out.println(id); // выводим id выбранного адверта в терминал
+        if (!getAdvertContact(id).isEmpty()) // если контакты адверта заполнены
+            System.out.println(getAdvertContact(id).getFirst().getEmail()); // то выводим почту в терминал
+        System.out.println(getAdvertPaymentInfo(id).getMinPayout()); // выводим Min Payout адверта
     }
 
     public static AdvertBasicInfoEntity getAdvertBasicInfo(int id) {
-        String path = DEV_API_NODE + "/advert/" + id;
-        String responseString = getMethod(path);
+        String path = DEV_API_NODE + "/advert/" + id; // генерим URL для запроса
+        String responseString = getMethod(path); // передаем GET запрос
 
-        JSONObject jsonObject = new JSONObject(responseString);
-        JSONObject data = jsonObject.getJSONObject("data");
+        JSONObject jsonObject = new JSONObject(responseString); // поулчаем ответ в виде JSON
+        JSONObject data = jsonObject.getJSONObject("data"); // поулчаем значение по ключу data
 
-        AdvertBasicInfoEntity advertBasicInfo = new AdvertBasicInfoEntity();
+        AdvertBasicInfoEntity advertBasicInfo = new AdvertBasicInfoEntity(); // создаем место хранения информации по адвертам
 
-        advertBasicInfo.setId(data.getInt("id"));
-        advertBasicInfo.setStatus(data.getString("status"));
+        advertBasicInfo.setId(data.getInt("id")); // извлекаем значение ключа id
+        advertBasicInfo.setStatus(data.getString("status")); // извлекаем значение ключа status
 
-        advertBasicInfo.setName(data.isNull("name") ? null : data.getString("name"));
-        advertBasicInfo.setCompanyLegalName(data.isNull("companyLegalname") ? null : data.getString("companyLegalname"));
+        advertBasicInfo.setName(data.isNull("name") ? null : data.getString("name")); // проверка на null, если null то подставляем свои значения
+        advertBasicInfo.setCompanyLegalName(data.isNull("companyLegalname") ? null : data.getString("companyLegalname")); // проверка на null, если null то подставляем свои значения 
         // advertBasicInfo.setRegistrationNumber(data.getString("registrationNumber"));
-        advertBasicInfo.setSiteUrl(data.isNull("siteUrl") ? null : data.getString("siteUrl"));
-        advertBasicInfo.setManagerId(data.isNull("managerId") ? null : data.getInt("managerId"));
-        advertBasicInfo.setSalesManager(data.isNull("salesManager") ? null : data.getInt("salesManager"));
-        advertBasicInfo.setAccountManager(data.isNull("accountManager") ? null : data.getInt("accountManager"));
-        advertBasicInfo.setUserRequestSource(data.isNull("userRequestSource") ? null : data.getInt("userRequestSource"));
-        advertBasicInfo.setNote(data.isNull("note") ? null : data.getString("note"));
+        advertBasicInfo.setSiteUrl(data.isNull("siteUrl") ? null : data.getString("siteUrl")); // проверка на null, если null то подставляем свои значения
+        advertBasicInfo.setManagerId(data.isNull("managerId") ? null : data.getInt("managerId")); // проверка на null, если null то подставляем свои значения
+        advertBasicInfo.setSalesManager(data.isNull("salesManager") ? null : data.getInt("salesManager")); // проверка на null, если null то подставляем свои значения
+        advertBasicInfo.setAccountManager(data.isNull("accountManager") ? null : data.getInt("accountManager")); // проверка на null, если null то подставляем свои значения
+        advertBasicInfo.setUserRequestSource(data.isNull("userRequestSource") ? null : data.getInt("userRequestSource")); // проверка на null, если null то подставляем свои значения
+        advertBasicInfo.setNote(data.isNull("note") ? null : data.getString("note")); // проверка на null, если null то подставляем свои значения
 
-        JSONObject offer = data.getJSONObject("offer");
+        JSONObject offer = data.getJSONObject("offer"); // извлекаем data из JSON с ключом offer
         // advertBasicInfo.setActiveOffersCount(parseUnknownValueToInteger(offer, "active"));
         // advertBasicInfo.setInactiveOffersCount(parseUnknownValueToInteger(offer, "inactive"));
         // advertBasicInfo.setTotalOffersCount(offer.getInt("total"));
         // advertBasicInfo.setDraftOffersCount(offer.getInt("draft"));
 
-        if (data.get("pricingModel") instanceof JSONArray) {
-            JSONArray pricingModelArray = data.getJSONArray("pricingModel");
-            List<String> listArray = StreamSupport.stream(pricingModelArray.spliterator(), false)
+        if (data.get("pricingModel") instanceof JSONArray) { // проверяем есть ли JSON массив
+            JSONArray pricingModelArray = data.getJSONArray("pricingModel"); // извлекаем data из JSON с ключом pricingModel
+            List<String> listArray = StreamSupport.stream(pricingModelArray.spliterator(), false) //массив из json загнать в наш привычный java массив
                     .map(Object::toString)
                     .toList();
             advertBasicInfo.setPricingModel(listArray);
-        } else advertBasicInfo.setPricingModel(null);
+        } else advertBasicInfo.setPricingModel(null); // Если pricingModel не массив, устанавливаем null
 
-        if (data.get("geo") instanceof JSONArray) {
+        if (data.get("geo") instanceof JSONArray) { // проверяем есть ли JSON массив
             JSONArray geoArray = data.getJSONArray("geo");
             List<String> listArray = StreamSupport.stream(geoArray.spliterator(), false)
                     .map(Object::toString)
                     .toList();
             advertBasicInfo.setGeo(listArray);
-        } else advertBasicInfo.setGeo(null);
+        } else advertBasicInfo.setGeo(null);  // Если не массив, устанавливаем null
 
-        if (data.get("categories") instanceof JSONArray) {
+        if (data.get("categories") instanceof JSONArray) { // проверяем есть ли JSON массив
             JSONArray categoriesArray = data.getJSONArray("categories");
             Set<Integer> categoriesIdList = new HashSet<>();
             for (int i = 0; i < categoriesArray.length(); i++) {
@@ -82,7 +89,7 @@ public class GetAdvert {
                 categoriesIdList.add(value);
             }
             advertBasicInfo.setCategories(categoriesIdList);
-        } else advertBasicInfo.setCategories(null);
+        } else advertBasicInfo.setCategories(null); // Если не массив, устанавливаем null
 
         if (data.get("tag") instanceof JSONArray) {
             JSONArray tagArray = data.getJSONArray("tag");
@@ -92,40 +99,40 @@ public class GetAdvert {
                 tagIdList.add(value);
             }
             advertBasicInfo.setTagsId(tagIdList);
-        } else advertBasicInfo.setTagsId(null);
-        return advertBasicInfo;
+        } else advertBasicInfo.setTagsId(null); // Если не массив, устанавливаем null
+        return advertBasicInfo; // возвращает заполненные данные на адверта
     }
 
-    public static ArrayList<AdvertContactEntity> getAdvertContact(int id) {
+    public static ArrayList<AdvertContactEntity> getAdvertContact(int id) { // получаем список контактов по id
         ArrayList<AdvertContactEntity> contactsList = new ArrayList<>();
 
-        String path = DEV_API_NODE + "/advert/" + id + "/contact";
-        String responseString = getMethod(path);
+        String path = DEV_API_NODE + "/advert/" + id + "/contact"; // URL запроса
+        String responseString = getMethod(path); // отправляем азпрос по сформированному URL
 
-        JSONObject jsonObject = new JSONObject(responseString);
-        JSONArray dataArray = jsonObject.getJSONArray("data");
+        JSONObject jsonObject = new JSONObject(responseString); // преобразуем в ответ в JSON
+        JSONArray dataArray = jsonObject.getJSONArray("data"); //извлекаем значение ключа data
 
-        for (int i = 0; i < dataArray.length(); i++) {
-            AdvertContactEntity advertContact = new AdvertContactEntity();
-            JSONObject dataObject = dataArray.getJSONObject(i);
-            advertContact.setContactID(dataObject.getInt("id"));
-            advertContact.setPerson(dataObject.getString("person"));
-            advertContact.setStatus(dataObject.getString("status"));
-            advertContact.setEmail(dataObject.isNull("email") ? null : dataObject.getString("email"));
-            advertContact.setPosition(dataObject.isNull("position") ? null : dataObject.getString("position"));
+        for (int i = 0; i < dataArray.length(); i++) { // перебираем весь ответ
+            AdvertContactEntity advertContact = new AdvertContactEntity(); // создаем новое место хранения для контактов адверта
+            JSONObject dataObject = dataArray.getJSONObject(i); // получаем данные на конкретный id контакта
+            advertContact.setContactID(dataObject.getInt("id")); // получаем id контакта
+            advertContact.setPerson(dataObject.getString("person")); // получаем person контакта
+            advertContact.setStatus(dataObject.getString("status")); // получаем status контакта
+            advertContact.setEmail(dataObject.isNull("email") ? null : dataObject.getString("email")); // если эл почта null то вставляем email
+            advertContact.setPosition(dataObject.isNull("position") ? null : dataObject.getString("position")); // если эл position = null то вставляем position
 
-            JSONArray messengersArray = dataObject.getJSONArray("messengers");
-            ArrayList<Messenger> messengers = new ArrayList<>();
-            for (int j = 0; j < messengersArray.length(); j++) {
-                JSONObject messengerObject = messengersArray.getJSONObject(j);
-                Messenger messenger = new Messenger();
-                messenger.setMessengerId(messengerObject.getInt("id"));
-                messenger.setMessengerTypeId(messengerObject.getInt("messengerId"));
-                messenger.setMessengerValue(messengerObject.getString("value"));
+            JSONArray messengersArray = dataObject.getJSONArray("messengers"); // получаем массив по ключу messengers
+            ArrayList<Messenger> messengers = new ArrayList<>(); // создаем место хранения messengers
+            for (int j = 0; j < messengersArray.length(); j++) { // перебираем все значения в ответе
+                JSONObject messengerObject = messengersArray.getJSONObject(j); // поулчаем данные о мессенджете с конкретным id
+                Messenger messenger = new Messenger(); // создаем новый объект Messenger
+                messenger.setMessengerId(messengerObject.getInt("id")); // устанавливаем id мессенджера
+                messenger.setMessengerTypeId(messengerObject.getInt("messengerId")); // устанавливаем id типа мессенджера
+                messenger.setMessengerValue(messengerObject.getString("value")); // устанавливаем value 
                 messengers.add(messenger);
             }
-            advertContact.setMessengers(messengers);
-            contactsList.add(advertContact);
+            advertContact.setMessengers(messengers); // сохраняем список мессенджеров в AdvertContactEntity
+            contactsList.add(advertContact); // сохраняем в список контактов
         }
         return contactsList;
     }
