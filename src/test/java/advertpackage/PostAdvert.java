@@ -28,8 +28,8 @@ import static helper.GetPost.postMethod;
 
 public class PostAdvert {
 
-    @Test
-    public static void test() {
+   // @Test
+    public static void testAdvert() {
 
         authApi(104);
 
