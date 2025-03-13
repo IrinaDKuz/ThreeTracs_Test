@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Advert Test Suite">
+    <test verbose="2" preserve-order="true" name="Admin API test">
+        <classes>
+            <class name="advertpackage.PostAdvert">
+            <methods>
+                <include name="testAdvert"/>
+            </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test verbose="2" preserve-order="true" name="Admin Permissions API test">
+        <classes>
+        </classes>
+    </test>
+
+    <test verbose="2" preserve-order="true" name="Admin content filter API test">
+        <classes>
+        </classes>
+    </test>
+</suite>
