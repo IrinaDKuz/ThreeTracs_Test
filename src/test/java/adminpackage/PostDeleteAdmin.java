@@ -34,7 +34,7 @@ public class PostDeleteAdmin { //создаем новый класс
         JsonObject jsonObject = gson.fromJson(createJsonAdmin(newAdmin, false), JsonObject.class);
 
         String responseBody = postMethod(DEV_API_NODE + "/admin/new", jsonObject);
-        System.out.println(ADD_RESPONSE + responseBody);
+        System.out.println(ADD_RESPONSE + responseBody); // выводим ответ
 
         newAdmin.setId(getEntityIdFromResponse(responseBody));
         System.out.println(newAdmin.getId());

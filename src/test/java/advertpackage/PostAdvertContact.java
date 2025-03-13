@@ -21,7 +21,7 @@ import static helper.GetPost.postMethod;
 public class PostAdvertContact {
 
     @Test
-    public static void test() {
+    public static void testContact() {
         authApi(104);
         Integer advertId = getRandomAdvert();
 
@@ -48,38 +48,41 @@ public class PostAdvertContact {
 
 
     public static void contactAddEdit(Boolean isEdit, AdvertContactEntity advertContact, Integer advertId) {
-        Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(createJsonAdvertContact(advertContact), JsonObject.class);
-        System.out.println(jsonObject.toString().replace("],", "],\n"));
+        Gson gson = new Gson(); // для сего создаем Gson?
+        JsonObject jsonObject = gson.fromJson(createJsonAdvertContact(advertContact), JsonObject.class); // парсим в JSON
+        System.out.println(jsonObject.toString().replace("],", "],\n")); // Выводим JSON-объект в консоль
 
         String path = isEdit ? DEV_API_NODE + "/advert/" + advertId + "/contact/" + advertContact.getContactID() + "/edit"
-                : DEV_API_NODE + "/advert/" + advertId + "/contact/add";
+                : DEV_API_NODE + "/advert/" + advertId + "/contact/add"; //создаем УРЛ
 
-        String responseBody = postMethod(path, jsonObject);
+        String responseBody = postMethod(path, jsonObject); // POST запрос
 
 
         if (!isEdit) {
-            System.out.println(ADD_RESPONSE + responseBody);
-            JSONObject jsonResponse = new JSONObject(responseBody);
+            System.out.println(ADD_RESPONSE + responseBody); // выводим ответ в консоль
+            JSONObject jsonResponse = new JSONObject(responseBody); // парсим ответ
             advertContact.setContactID(jsonResponse.getJSONObject("data").getInt("advertContact"));
         } else {
-            System.out.println(EDIT_RESPONSE + responseBody);
+            System.out.println(EDIT_RESPONSE + responseBody); // выводим ответ в консоль
         }
-    }
+    } // если не редактируем то создаем
 
     private static JsonObject createJsonAdvertContact(AdvertContactEntity advertContact) {
-        JsonObject jsonObject = new JsonObject();
+        JsonObject jsonObject = new JsonObject(); // Создаем новый JSON-объект
 
+        // Добавляем свойства контакта в JSON
         jsonObject.addProperty("status", advertContact.getStatus().toLowerCase());
         jsonObject.addProperty("person", advertContact.getPerson());
         jsonObject.addProperty("email", advertContact.getEmail());
         jsonObject.addProperty("position", advertContact.getPosition());
 
+        // создаем место хранения данных
         JsonArray messengersArray = new JsonArray();
 
-        for (AdvertContactEntity.Messenger messenger : advertContact.getMessengers()) {
+        //
+        for (AdvertContactEntity.Messenger messenger : advertContact.getMessengers()) { //запускаем цикл создания JSON объекта
             JsonObject jsonMessenger = new JsonObject();
-            if (messenger.getMessengerId() != null) {
+            if (messenger.getMessengerId() != null) { // условия на создание или редактирования id и значения
                 jsonMessenger.addProperty("id", messenger.getMessengerId());
             }
             jsonMessenger.addProperty("messengerId", messenger.getMessengerTypeId());

@@ -31,12 +31,12 @@ public class PostAdvert {
     @Test
     public static void testAdvert() {
 
-        authApi(104);
+        authApi(104); // авторизуемся 104-м админом
 
-        AdvertBasicInfoEntity advertBasicInfo = new AdvertBasicInfoEntity();
+        AdvertBasicInfoEntity advertBasicInfo = new AdvertBasicInfoEntity(); // создаем новый объект и заполняем его полями
         advertBasicInfo.generateMaxFields();
-        basicInfoAddEdit(false, advertBasicInfo);
-        System.out.println(advertBasicInfo.getId());
+        basicInfoAddEdit(false, advertBasicInfo); //создаем нового адверта
+        System.out.println(advertBasicInfo.getId()); // выводит id созданного адверта в консоль
 
         // advertId = advertPrimaryInfoAdd.getAdvertId();
         // primaryInfoAssert(advertPrimaryInfoAdd, primaryInfoGet(false));
@@ -44,9 +44,9 @@ public class PostAdvert {
         // Allure.step("Редактируем Primary Info Адверта id=" + advertId);
         AdvertBasicInfoEntity advertBasicInfoEdit = new AdvertBasicInfoEntity();
         advertBasicInfoEdit.generateMaxFields();
-        advertBasicInfoEdit.setId(advertBasicInfo.getId());
+        advertBasicInfoEdit.setId(advertBasicInfo.getId()); // находим id адверта
 
-        basicInfoAddEdit(true, advertBasicInfoEdit);
+        basicInfoAddEdit(true, advertBasicInfoEdit); // редактируем адверта
 
         // primaryInfoAssert(advertPrimaryInfoEdit, primaryInfoGet(false));
 
@@ -56,30 +56,30 @@ public class PostAdvert {
     }
 
 
-    public static void basicInfoAddEdit(Boolean isEdit, AdvertBasicInfoEntity advertBasicInfo) {
-        Gson gson = new Gson();
+    public static void basicInfoAddEdit(Boolean isEdit, AdvertBasicInfoEntity advertBasicInfo) { //????
+        Gson gson = new Gson(); //?
         JsonObject jsonObject = gson.fromJson(createJsonAdvert(advertBasicInfo), JsonObject.class);
-        System.out.println(jsonObject.toString().replace("],", "],\n"));
+        System.out.println(jsonObject.toString().replace("],", "],\n")); //  выводим в терминал объект который создали и делаем это красивым
 
         String path = isEdit ? DEV_API_NODE + "/advert/" + advertBasicInfo.getId() + "/edit" :
-                DEV_API_NODE + "/advert/new";
+                DEV_API_NODE + "/advert/new"; // формируем УРЛ для запроса
 
         String responseBody = postMethod(path, jsonObject);
 
         if (!isEdit) {
             System.out.println(ADD_RESPONSE + responseBody);
-            JSONObject jsonResponse = new JSONObject(responseBody);
+            JSONObject jsonResponse = new JSONObject(responseBody); // записываем id созданного адверта
             advertBasicInfo.setId(jsonResponse.getJSONObject("data").getInt("advertId"));
         } else {
-            System.out.println(EDIT_RESPONSE + responseBody);
+            System.out.println(EDIT_RESPONSE + responseBody); //подтверждение успешного редактирования
         }
     }
 
     private static JsonObject createJsonAdvert(AdvertBasicInfoEntity advertBasicInfo) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("tab", "primary");
+        JsonObject jsonObject = new JsonObject(); // создаем новый Json объект
+        jsonObject.addProperty("tab", "primary"); // добавляем tab и primary
 
-        JsonObject advertObject = new JsonObject();
+        JsonObject advertObject = new JsonObject(); // создаем новый Json объект // нужно пояснение
         advertObject.addProperty("status", advertBasicInfo.getStatus().toLowerCase());
         advertObject.addProperty("name", advertBasicInfo.getName());
         advertObject.addProperty("managerId", advertBasicInfo.getManagerId());
@@ -90,8 +90,8 @@ public class PostAdvert {
         advertObject.addProperty("note", advertBasicInfo.getNote());
         advertObject.addProperty("userRequestSource",advertBasicInfo.getUserRequestSource());
 
-        List<String> pricingModelList = advertBasicInfo.getPricingModel();
-        JsonArray pricingModelArray = new JsonArray();
+        List<String> pricingModelList = advertBasicInfo.getPricingModel(); //
+        JsonArray pricingModelArray = new JsonArray(); // формируем массив
         pricingModelList.forEach(pricingModelArray::add);
         advertObject.add("pricingModel", pricingModelArray);
 
