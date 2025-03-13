@@ -1,33 +1,39 @@
 package exportentitypackage;
 
 import advertpackage.advertentity.AdvertBasicInfoEntity;
-import advertpackage.advertentity.AdvertContactEntity;
-import advertpackage.advertentity.AdvertContactEntity.Messenger;
-import advertpackage.advertentity.AdvertPaymentInfoEntity;
-import advertpackage.advertentity.AdvertRequisitesEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.annotations.Test;
 
 import java.util.*;
-import java.util.stream.StreamSupport;
 
-import static adminpackage.Auth.*;
+import static adminpackage.Auth.AFFISE_ADVERT_NODE;
+import static adminpackage.Auth.authApi;
+import static advertpackage.PostAdvert.basicInfoAddEdit;
 import static helper.GetPost.getAffiseMethod;
-import static helper.GetPost.getMethod;
 
 public class ExportEntityTest {
 
     @Test
-    public static void test() {
+    public static void test() throws InterruptedException {
         String affiseId = "67d2bbbdcdc580593d9b016d";
+        Integer threeTracksId = 1158;
 
-        // записать
+        System.err.println("Считываем данные из Affise у Адверта с id = " + affiseId);
         AffiseAdvertInfoEntity affiseAdvertInfoEntityBefore = getAffiseAdvertInfo(affiseId);
-        // изменить
-        // записать 2
+
+        System.err.println("Заходим в 3Tracks и полностью меняем Basic поля у Адверта с id = " + threeTracksId);
+        authApi(104);
+        AdvertBasicInfoEntity advertBasicInfoEdit = new AdvertBasicInfoEntity();
+        advertBasicInfoEdit.generateMaxFields();
+        advertBasicInfoEdit.setId(threeTracksId);
+        basicInfoAddEdit(true, advertBasicInfoEdit); // редактируем адверта
+
+        Thread.sleep(10000);
+        System.err.println("Второй раз считываем данные из Affise у Адверта с id = " + affiseId);
         AffiseAdvertInfoEntity affiseAdvertInfoEntityAfter = getAffiseAdvertInfo(affiseId);
-        // сравнить
+
+        System.err.println("Сравниваем до и после из Affise у Адверта с id = " + affiseId);
         assertAdvertInfo(affiseAdvertInfoEntityBefore, affiseAdvertInfoEntityAfter);
     }
 
