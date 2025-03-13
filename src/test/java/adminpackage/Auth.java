@@ -17,6 +17,8 @@ public class Auth {
 
     public static final String DEV_NODE = "https://admin.3tracks.link/"; 
     public static final String DEV_API_NODE = "https://api.admin.3tracks.link";
+    public static final String AFFISE_ADVERT_NODE = "https://api-demo.affise.com/3.0/admin/advertiser/";
+
 
     static Map<Integer, Map<String, String>> USERS = new HashMap<>() {
         {

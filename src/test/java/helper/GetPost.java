@@ -45,4 +45,17 @@ public class GetPost {
 
         return response.getBody().asString();
     }
+
+    public static String getAffiseMethod(String path) {
+
+        Response response = RestAssured.given()
+                .contentType(ContentType.URLENC)
+                .header("api-key", "f9764bf2be8cb5dfc79631cea1863a8a")
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .get(path);
+
+        return response.getBody().asString();
+    }
+
 }
