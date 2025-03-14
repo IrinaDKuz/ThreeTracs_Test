@@ -16,7 +16,7 @@ public class ExportEntityTest {
 
     @Test
     public static void test() throws InterruptedException {
-        String affiseId = "67d2bbbdcdc580593d9b016d";
+        String affiseId = "67caf3662d2c7c1cd4aa7520";
         Integer threeTracksId = 1158;
 
         System.err.println("Считываем данные из Affise у Адверта с id = " + affiseId);
@@ -30,6 +30,7 @@ public class ExportEntityTest {
         basicInfoAddEdit(true, advertBasicInfoEdit); // редактируем адверта
 
         Thread.sleep(10000);
+
         System.err.println("Второй раз считываем данные из Affise у Адверта с id = " + affiseId);
         AffiseAdvertInfoEntity affiseAdvertInfoEntityAfter = getAffiseAdvertInfo(affiseId);
 

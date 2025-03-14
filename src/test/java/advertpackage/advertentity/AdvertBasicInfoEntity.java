@@ -31,7 +31,9 @@ public class AdvertBasicInfoEntity { //поля, которые заполняю
 
     public void generateMinFields() {
         Faker faker = new Faker(); //создаем новую сущность (факер - это библиотека рандомных значений)
-        this.status = getRandomKey(ADVERT_STATUS_MAP);
+       // this.status = getRandomKey(ADVERT_STATUS_MAP);
+        this.status = "active";
+
         this.name = faker.animal().scientificName(); //пароль для нового админа
         this.managerId = getRandomEnableAdmin();
     }
@@ -54,11 +56,13 @@ public class AdvertBasicInfoEntity { //поля, которые заполняю
         }
 
         this.pricingModel = Arrays.asList(getRandomKey(MODEL_TYPES_MAP));
-        this.note = faker.text().toString();
+        this.note = faker.lorem().paragraph();
         this.accountManager = getRandomEnableAdmin();
         this.salesManager = getRandomEnableAdmin();
         this.userRequestSource = getRandomEnableAdmin();
-        this.siteUrl = faker.internet().url();
+        // this.siteUrl = faker.internet().url();
+        this.siteUrl = "https://docs.google.com/" + faker.number().randomNumber();
+
         this.companyLegalName = faker.artist().name();
     }
 
