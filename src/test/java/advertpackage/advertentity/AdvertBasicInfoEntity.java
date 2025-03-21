@@ -1,13 +1,13 @@
 package advertpackage.advertentity;
 
-import java.util.*;
-
 import net.datafaker.Faker;
 
-import static adminpackage.GetAdmin.getRandomEnableAdmin;
-import static helper.ConstantsName.ADVERT_STATUS_MAP;
+import java.util.*;
+
+import static adminpackage.GetAdmin.getRandomSpecificEnableAdmin;
 import static helper.ConstantsName.MODEL_TYPES_MAP;
-import static helper.GeoHelper.*;
+import static helper.GeoHelper.GEO_MAP;
+import static helper.GeoHelper.getRandomKey;
 import static settingspackage.GetCategory.getRandomCategory;
 import static settingspackage.GetTag.getRandomTag;
 
@@ -27,15 +27,15 @@ public class AdvertBasicInfoEntity { //поля, которые заполняю
     String siteUrl;
     Set<Integer> tagsId = new HashSet<>();
     int userRequestSource;
+   String specificSecondName = "FOR EXPORT AFFISE";
 
 
     public void generateMinFields() {
         Faker faker = new Faker(); //создаем новую сущность (факер - это библиотека рандомных значений)
        // this.status = getRandomKey(ADVERT_STATUS_MAP);
         this.status = "active";
-
-        this.name = faker.animal().scientificName(); //пароль для нового админа
-        this.managerId = getRandomEnableAdmin();
+        this.name = faker.animal().scientificName();
+        this.managerId = getRandomSpecificEnableAdmin(specificSecondName);
     }
 
     public void generateMaxFields() {
@@ -57,13 +57,12 @@ public class AdvertBasicInfoEntity { //поля, которые заполняю
 
         this.pricingModel = Arrays.asList(getRandomKey(MODEL_TYPES_MAP));
         this.note = faker.lorem().paragraph();
-        this.accountManager = getRandomEnableAdmin();
-        this.salesManager = getRandomEnableAdmin();
-        this.userRequestSource = getRandomEnableAdmin();
+        this.accountManager = getRandomSpecificEnableAdmin(specificSecondName);
+        this.salesManager = getRandomSpecificEnableAdmin(specificSecondName);
+        this.userRequestSource = getRandomSpecificEnableAdmin(specificSecondName);
         // this.siteUrl = faker.internet().url();
         this.siteUrl = "https://docs.google.com/" + faker.number().randomNumber();
-
-        this.companyLegalName = faker.artist().name();
+        this.companyLegalName = faker.pokemon().name() + faker.number().randomNumber() + "@mailto.plus";
     }
 
     public int getId() {
@@ -177,6 +176,4 @@ public class AdvertBasicInfoEntity { //поля, которые заполняю
     public void setUserRequestSource(int userRequestSource) {
         this.userRequestSource = userRequestSource;
     }
-
-
 }

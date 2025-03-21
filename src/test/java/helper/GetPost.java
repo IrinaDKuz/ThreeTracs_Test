@@ -31,6 +31,8 @@ public class GetPost {
                 .body(jsonObject.toString())
                 .post(path);
 
+        System.out.println(response);
+
         return response.getBody().asString();
     }
 

@@ -31,9 +31,9 @@ public class AdminEntity { //поля, которые заполняются н�
         this.status = "enabled"; //ставим статус энейбл
        // this.role = "enable"; TODO: Сделать роль
         this.password = "password"; //пароль для нового админа
-        this.firstName = faker.name().firstName(); //генерим рандомное имя
-        this.secondName = faker.name().lastName(); //генерим рандомное имя
-        this.email =  faker.internet().emailAddress(this.firstName+this.secondName); //геерим рандомную почту
+        this.firstName = "NEW_EXPORT_E" + faker.name().firstName(); // генерим рандомное имя
+        this.secondName = "NEW_EXPORT_E" + faker.name().lastName(); // генерим рандомное имя
+        this.email =  faker.internet().emailAddress(this.firstName + this.secondName); //геерим рандомную почту
         this.skype = "live:" + faker.dessert().flavor(); //генерим почту
         this.telegram = "@" + faker.dessert().topping(); // генерим почту
         this.phone = faker.phoneNumber().cellPhone(); //генерим номер телефона

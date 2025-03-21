@@ -79,4 +79,25 @@ public class GetAdmin {
         Integer randomId = adminsIds.get(new Random().nextInt(adminsIds.size())); // создаем переменную randomId
         return randomId;
     }
+
+
+    public static Integer getRandomSpecificEnableAdmin(String specificSecondName) {
+        if (ADMINS.isEmpty())
+            getAdmins();
+
+        ArrayList<Integer> adminsIds = new ArrayList<>(); // создали список где будут храниться id админов
+
+        // проходимся по всем админам в списке
+        for (int i = 0; i < ADMINS.size(); i++) {
+
+            String status = ADMINS.get(i).getStatus();
+            String secondName = ADMINS.get(i).getSecondName();
+
+            if (status.equals("enabled") && secondName.equals(specificSecondName) ) {
+                adminsIds.add(ADMINS.get(i).getId());
+            }
+        }
+        Integer randomId = adminsIds.get(new Random().nextInt(adminsIds.size())); // создаем переменную randomId
+        return randomId;
+    }
 }

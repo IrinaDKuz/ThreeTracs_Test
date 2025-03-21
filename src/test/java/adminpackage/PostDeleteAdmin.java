@@ -17,16 +17,18 @@ public class PostDeleteAdmin { //создаем новый класс
 
     @Test // начало теста
     public static void createNewAdmin() { //создаем нового админа
+
         authApi(104); //авторизовываемся в система (под 104-м админом)
+        for (int i = 0; i < 10; i++) {
         AdminEntity newAdmin = new AdminEntity(); //создаем нового админа
         newAdmin.generateFields(); //заполняем новому админу поля из файла AdminEntity
         postNewAdmin(newAdmin); //отправляем заполненные данные на нового админа
-
+        }
         // расписать до сюда
-        newAdmin.generateFields();
-        postEditAdmin(newAdmin);
+       // newAdmin.generateFields();
+       // postEditAdmin(newAdmin);
 
-        deleteAdmin(newAdmin.getId());
+        // deleteAdmin(newAdmin.getId());
     }
 
     public static void postNewAdmin(AdminEntity newAdmin) {
